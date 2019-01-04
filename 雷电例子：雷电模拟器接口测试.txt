@@ -1,0 +1,56 @@
+TracePrint("***************雷电模拟器接口测试*************")
+TracePrint "【初始化】：" & Lib.雷电模拟器._初始化(路径)
+
+List = Lib.雷电模拟器.雷电_获取模拟器加强()
+Lists = Split(List, vbCrLf)
+TracePrint("解析模拟器信息：")
+For i = 0 To UBound(Lists)
+        Infos = Split(Lists(i), ",")
+        
+        Dim index, name,mainFrame, renderFrame, isRunning, progressID, vboxProgressID
+        index = Infos(0)       //索引
+        name = Infos(1)        //标题
+        mainFrame = Infos(2)   //主窗口句柄
+        renderFrame = Infos(3) //安卓窗口句柄, 需要绑定的
+        isRunning = Infos(4)   //是否已经启动(进入了安卓系统)
+        progressID = Infos(5)  //进程ID
+        vboxProgressID = Infos(6) //Vbox进程
+        TracePrint("索引:" & index &"    标题:" & name&"    主窗口句柄:" & mainFrame&"    安卓窗口句柄:" & renderFrame&"    是否启动:" & isRunning&"    进程ID:" & progressID&"    VBox进程:" & vboxProgressID)
+Next
+
+//指定模拟器编号
+编号 = 0
+
+//修改模拟器配置(不需要的项用0代替)
+TracePrint "【修改模拟器】：" & Lib.雷电模拟器.雷电_修改模拟器配置(编号, 800, 800, 220, 2, 0)
+Delay (5000)
+
+
+//启动模拟器0
+TracePrint "【启动模拟器】：" & Lib.雷电模拟器.雷电_启动模拟器(编号)
+Delay (5000)
+
+
+//判断是否启动, 信息类型：0=编号(索引)；1=标题；2=顶层句柄；3=绑定句柄；4=是否进入；5=进程PID；6=Vbox进程PID
+Do
+	返回值 = Lib.雷电模拟器.雷电_获取模拟器信息(编号, 4)
+	TracePrint ("模拟器1是否已经启动：" & 返回值)
+	Delay 5000
+Loop Until 返回值 = 1
+
+
+//标题到编号(索引)
+返回值 = Lib.雷电模拟器.雷电_获取模拟器信息("雷电模拟器-1", 0)
+TracePrint ("雷电模拟器-1 的编号（索引）是：" & 返回值)
+Delay(5000)
+
+//启动APP
+TracePrint "【启动APP】：" & Lib.雷电模拟器.雷电_应用启动(编号, "com.tencent.mm")
+
+//ADB命令
+TracePrint "【ADB命令】：" & Lib.雷电模拟器.雷电_执行ADB命令(编号, "pm list packages")
+Delay(5000)
+
+//关闭模拟器
+MsgBox "点击【确定】按钮后，将执行【关闭模拟器】操作！", 4096, "提示！"
+TracePrint "【关闭模拟器】：" & Lib.雷电模拟器.雷电_关闭模拟器(编号)

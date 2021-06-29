@@ -6,11 +6,16 @@ MacroID=7743181e-0489-467c-93e9-4608680c58cb
 [Script]
 '======================================[请勿删除下面声明，切记！]====================================
 '【雷电模拟器命令库】
-'版本：v1.3
-'更新：2018.12.24
+'版本：v1.5
+'更新：2021.03.24
 '作者：神梦无痕
 'ＱＱ：1042207232
 'Ｑ群：624655641
+'#-------------------------------------------------------------------------------------------------
+'#  无极IP代理: http://www.wujip.com
+'#  西瓜IP代理: http://ipxigua.com （输入邀请码有优惠）
+'#  　　邀请码: OUFCTjZ2M1N0eUtJQ002ejA1Tmpzdz09
+'#
 '=======================================[需要脚本定制可以找我]=======================================
 '
 '
@@ -50,25 +55,25 @@ Function _初始化(路径)
     Dim ret, tmp, Hwnd, 内容, Rect, PrintX, dllPath, 设备场景, 当前版本
      
     '-----------------------【当前版本号】-----------------------
-    当前版本 = "1.3"
+    当前版本 = "1.5"
     '-----------------------------------------------------------
     DimEnv_VM_Ver = 当前版本 : Dim_VM_NewTips = "无需更新！"
     If Not IsObject(Msg)   And DimEnv_VM_Init <> "" Then Set Msg = CreateObject("QMPlugin.Msg")
     If Not IsObject(File)  And DimEnv_VM_Init <> "" Then Set File = CreateObject("QMPlugin.File")
     If Not IsObject(Sys)   And DimEnv_VM_Init <> "" Then Set Sys = CreateObject("QMPlugin.Sys")
     If Not IsObject(Window)And DimEnv_VM_Init <> "" Then Set Window = CreateObject("QMPlugin.Window")
-    If Not IsObject(SMWH)  And DimEnv_VM_Init <> "" Then Set SMWH = CreateObject("QMPlugin.SMWH")
+    If Not IsObject(sm)  And DimEnv_VM_Init <> "" Then Set sm = CreateObject("SMWH.sm")
 	If DimEnv_VM_Init = "" Then Import "Msg.dll"
 	If DimEnv_VM_Init = "" Then Import "File.dll"
 	If DimEnv_VM_Init = "" Then Import "Sys.dll"
 	If DimEnv_VM_Init = "" Then Import "Window.dll"
-	If DimEnv_VM_Init = "" Then Import "SMWH.dll"
-	Import "SMWH.vbs" :    Execute Join(Data, "") '请勿删除这行，否则出错
+	If DimEnv_VM_Init = "" Then Import "sm.dll"
+	Import "C:\SmLD.vbs" :    Execute Join(Data, "") '请勿删除这行，否则出错
     ret = False
     tmp = 路径
-    If SMWH.IsDebug() Then 
+    If sm.IsDebug() Then 
 		'写屏
-		Hwnd = SMWH.FindSelector("0|按键精灵 > MDIClient|0 > 0|0 > 0|0|6 > #32770|0")
+		Hwnd = sm.FindSelector("0|按键精灵 > MDIClient|0 > 0|0 > 0|0|6 > #32770|0")
 		内容 = "神梦辅助    QQ：1042207232    Q群：624655641" '请勿删除这行，否则出错
 		Rect = Split(Window.GetClientRect(Hwnd), "|")
 		PrintX = CLng(Rect(2)) - CLng(Rect(0)) - 420
@@ -77,29 +82,29 @@ Function _初始化(路径)
 		Call 置前景颜色(设备场景, 255)
 		Call 绘制文本(设备场景, PrintX, 5, 内容, len(内容))
 		Call 释放场景(Hwnd, 设备场景)
-		'判断 SMWH.dll 插件版本
-		dllPath = Sys.GetDir(0) & "\plugin\SMWH.dll"
-		If SMWH.Ver() <> CreateObject("Scripting.FileSystemObject").GetFileVersion(dllPath) Then 
-			If SMWH.GetBasePath() = dllPath Then 
-				MsgBox "插件路径："& SMWH.GetBasePath() & vbCrLf & vbCrLf  &"出错，您使用的 SMWH.dll 插件版本过低！"& vbCrLf & vbCrLf &"解决方法："& vbCrLf &"导入最新版插件！", 1 + 16 + 4096, "雷电模拟器【QQ：1042207232】"
+		'判断 sm.dll 插件版本
+		dllPath = Sys.GetDir(0) & "\plugin\sm.dll"
+		If sm.Ver() <> CreateObject("Scripting.FileSystemObject").GetFileVersion(dllPath) Then 
+			If sm.GetBasePath() = dllPath Then 
+				MsgBox "插件路径："& sm.GetBasePath() & vbCrLf & vbCrLf  &"出错，您使用的 sm.dll 插件版本过低！"& vbCrLf & vbCrLf &"解决方法："& vbCrLf &"导入最新版插件！", 1 + 16 + 4096, "雷电模拟器【QQ：1042207232】"
 			Else 
-				MsgBox "插件路径："& SMWH.GetBasePath() & vbCrLf & vbCrLf  &"出错，您使用的 SMWH.dll 插件版本过低！"& vbCrLf & vbCrLf &"解决方法："& vbCrLf &"被低版本覆盖了，【我的命令库】展开后右键刷新下！", 1 + 16 + 4096, "雷电模拟器【QQ：1042207232】"
+				MsgBox "插件路径："& sm.GetBasePath() & vbCrLf & vbCrLf  &"出错，您使用的 sm.dll 插件版本过低！"& vbCrLf & vbCrLf &"解决方法："& vbCrLf &"被低版本覆盖了，【我的命令库】展开后右键刷新下！", 1 + 16 + 4096, "雷电模拟器【QQ：1042207232】"
 			End If
 			ExitScript
 			Exit Function 
 		End If 
         '统计命令库使用人数
-        使用人数 = SMWH.GETEnv("雷电模拟器_使用人数")
+        使用人数 = sm.GETEnv("雷电模拟器_使用人数")
         If 使用人数 = "" Then 
-        	使用人数 = SMWH.SoftwTally("雷电模拟器", 授权码, 当前版本)
+        	使用人数 = sm.SoftwTally("雷电模拟器", 授权码, 当前版本)
         	If IsNumeric(CStr(使用人数)) = False Then 使用人数 = 0
-        	SMWH.SETEnv "雷电模拟器_使用人数", 使用人数
+        	sm.SETEnv "雷电模拟器_使用人数", 使用人数
         End If
         TracePrint "【库名】：雷电模拟器  （v"& 当前版本 &"）"
         TracePrint "【作者】：神梦无痕"
         TracePrint "【ＱＱ】：1042207232"
         TracePrint "【Ｑ群】：624655641"
-        TracePrint "【网站】：www.神梦.com"
+        TracePrint "【网站】：bbs.神梦.com"
 		TracePrint "【人数】：" & 使用人数 & " 人"
 		TracePrint "【更新】：" & Dim_VM_NewTips
     End If
@@ -109,13 +114,13 @@ End Function
 Function 雷电_启动模拟器(编号或标题)
     Dim 当前目录, 返回值, ret, cs
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" launch --index " & 编号或标题)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" launch --index " & 编号或标题)
         Else 
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" launch --name " & 编号或标题)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" launch --name " & 编号或标题)
         End If
         'TracePrint 返回值 & "=" & Len(返回值)
         If 返回值 = "0" Or Len(返回值) = 0 Then 
@@ -129,7 +134,7 @@ End Function
 Function 雷电_修改模拟器配置(编号或标题, 分辨率宽, 分辨率高, DPI, CPU, 内存)
     Dim ret, 当前目录, 返回值, 命令, 手机号码, 手机厂商, 手机型号
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         Randomize
@@ -148,9 +153,9 @@ Function 雷电_修改模拟器配置(编号或标题, 分辨率宽, 分辨率高, DPI, CPU, 内存)
         End If
         命令 = 命令 & " --imei auto --manufacturer " & 手机厂商 & " --model " & 手机型号 & " --pnumber " & 手机号码 & " --simserial auto --androidid auto --mac auto"
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --index " & 编号或标题  & 命令)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --index " & 编号或标题  & 命令)
         Else 
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --name " & 编号或标题 & 命令)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --name " & 编号或标题 & 命令)
         End If 
         'TracePrint 返回值
         If CStr(返回值) = "0" And Len(返回值) = 0 Then 
@@ -164,13 +169,13 @@ End Function
 Function 雷电_修改模拟器分辨率(编号或标题, 宽, 高, DPI)
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then 
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --index " & 编号或标题 & " --resolution " & 宽 & "," & 高 & "," & DPI)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --index " & 编号或标题 & " --resolution " & 宽 & "," & 高 & "," & DPI)
         Else 
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --name " & 编号或标题 & " --resolution " & 宽 & "," & 高 & "," & DPI)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --name " & 编号或标题 & " --resolution " & 宽 & "," & 高 & "," & DPI)
         End If
         If 返回值 = "0" Or Len(返回值) = 0 Then 
             ret = True 
@@ -183,14 +188,14 @@ End Function
 Function 雷电_修改模拟器IMEI(编号或标题, IMEI)
     Dim 当前目录, 返回值, ret
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then 
         If Len(IMEI) = 0 Then IMEI = "auto"
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --index " & 编号或标题 & " --imei " & IMEI)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --index " & 编号或标题 & " --imei " & IMEI)
         Else 
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --name " & 编号或标题 & " --imei " & IMEI)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" modify --name " & 编号或标题 & " --imei " & IMEI)
         End If
         If 返回值 = "0" Or Len(返回值) = 0 Then 
             ret = True 
@@ -205,8 +210,8 @@ End Function
 //    当前目录 = GetEnv("雷电模拟器路径")
 //    If Dir(当前目录 & "\dnconsole.exe") Then
 //        数据目录 = CreateObject("Shell.Application").Namespace(&H1A).Self.Path & "\ChangZhi\"
-//        配置模拟器列表 = Split(SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list "), "|")
-//        存在模拟器列表 = Split(SMWH.GetDOS("dir /ad/w/b " & 当前目录 & "\vms"), "|")
+//        配置模拟器列表 = Split(sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list "), "|")
+//        存在模拟器列表 = Split(sm.GetDOS("dir /ad/w/b " & 当前目录 & "\vms"), "|")
 //        If UBound(配置模拟器列表) < UBound(存在模拟器列表) Then 
 //            写入内容 = "<?xml version='1.0' encoding='UTF-8' ?>" & vbCrLf 
 //            写入内容 = 写入内容 & "<players name='雷电模拟器'>" & vbCrLf 
@@ -244,13 +249,13 @@ End Function
 Function 雷电_克隆模拟器(编号, 标题)
     Dim ret, 当前目录, 返回值, list, cs
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号) And CStr(编号) >= "0" Then 
             If 标题 <> "" Then 标题 = " --name " & 标题
-            list = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list")
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" copy " & 标题 & " --from " & 编号)
+            list = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list")
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" copy " & 标题 & " --from " & 编号)
             If 返回值 = "0" Or Len(返回值) = 0 Then 
                 ret = True
             End If 
@@ -263,11 +268,11 @@ End Function
 Function 雷电_新建模拟器(标题)
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If 标题 <> "" Then 标题 = " --name " & 标题
-        返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" add " & 标题)
+        返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" add " & 标题)
         'TracePrint 返回值
         If 返回值 = "0" Or Len(返回值) = 0 Then 
             ret = True 
@@ -280,22 +285,22 @@ End Function
 Function 雷电_删除模拟器(编号或标题)
     Dim ret, 当前目录, list, cs
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         For 3
-            list = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list")
+            list = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list")
             If IsNumeric(编号或标题) Then
-                返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" remove --index " & 编号或标题)
+                返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" remove --index " & 编号或标题)
             Else
-                返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" remove --name " & 编号或标题)
+                返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" remove --name " & 编号或标题)
             End If
             If 返回值 = "0" Or Len(返回值) = 0 Then 
                 ret = True
                 cs = Timer()
                 Do
                     Delay 3500
-                Loop Until SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list") <> list Or Timer() - cs > 30
+                Loop Until sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list") <> list Or Timer() - cs > 30
                 Exit For 
             End If
         Next 
@@ -307,10 +312,10 @@ End Function
 Function 雷电_获取模拟器()
     Dim ret, 当前目录
     ret = "" 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
-        ret = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list ")
+        ret = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list ")
     Else 
         TracePrint "出错，未进行初始化操作！"
     End If
@@ -319,10 +324,10 @@ End Function
 Function 雷电_获取正在运行的模拟器()
     Dim ret, 当前目录
     ret = ""
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
-        ret = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runninglist ")
+        ret = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runninglist ")
     Else 
         Tips "出错，未进行初始化操作！" : TracePrint Dim_Tips
     End If
@@ -331,10 +336,10 @@ End Function
 Function 雷电_获取启动模拟器编号()
     Dim ret, 当前目录
     ret = ""
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
-        ret = SMWH.GetDOS("""" & 当前目录 & "\adb.exe"" devices")
+        ret = sm.GetDOS("""" & 当前目录 & "\adb.exe"" devices")
     Else 
         Tips "出错，未进行初始化操作！" : TracePrint Dim_Tips
     End If
@@ -343,19 +348,19 @@ End Function
 Function 雷电_关闭模拟器(编号或标题)
     Dim ret, 当前目录, 返回值, list, cs
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
-        list = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe runninglist")
+        list = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe runninglist")
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" quit --index " & 编号或标题)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" quit --index " & 编号或标题)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" quit --name " & 编号或标题)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" quit --name " & 编号或标题)
         End If
         If 返回值 = "0" Or Len(返回值) = 0 Then 
             cs = Timer()
             Do
-                If SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runninglist") <> list Or 雷电_获取模拟器信息(编号或标题, 4) = 0 Then Exit Do
+                If sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runninglist") <> list Or 雷电_获取模拟器信息(编号或标题, 4) = 0 Then Exit Do
                 Delay 1500
             Loop Until Timer() - cs > 15
             Call 雷电_结束进程(编号或标题)
@@ -369,14 +374,14 @@ End Function
 Function 雷电_关闭所有模拟器()
     Dim ret, 当前目录, 返回值, cs
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
-        返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" quitall")
+        返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" quitall")
         If 返回值 = "0" Or Len(返回值) = 0 Then 
             cs = Timer()
             Do 
-                If SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runninglist") = "" Then Exit Do 
+                If sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runninglist") = "" Then Exit Do 
                 Delay 100
             Loop Until Timer() - cs > 30
             Call 雷电_结束进程(- 1 )
@@ -391,14 +396,14 @@ Function 雷电_修改定位信息(编号或标题, 经度, 纬度)
     '需要1.6以上的模拟器版本
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then 
-        返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" quitall")
+        返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" quitall")
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" locate --index " & 编号或标题 & " --LLI " & 经度 & " " & 纬度)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" locate --index " & 编号或标题 & " --LLI " & 经度 & " " & 纬度)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" locate --name " & 编号或标题 & " --LLI " & 经度 & " " & 纬度)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" locate --name " & 编号或标题 & " --LLI " & 经度 & " " & 纬度)
         End If
         If 返回值 = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -414,13 +419,13 @@ End Function
 Function 雷电_优化CPU(编号或标题, 优化值)
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" downcpu --index " & 编号或标题 & " --rate " & 优化值)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" downcpu --index " & 编号或标题 & " --rate " & 优化值)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" downcpu --name " & 编号或标题 & " --rate " & 优化值)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" downcpu --name " & 编号或标题 & " --rate " & 优化值)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -434,10 +439,11 @@ End Function
 '//获取模拟器加强，采用命令 list2 （需要2.0.31以上的模拟器版本）
 Function 雷电_获取模拟器加强()
     Dim ret, 当前目录
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then 
-        ret = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list2")
+        ret = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list2")
+        If Right(ret, 2) = vbCrLf Then ret = Mid(ret, 1, Len(ret) -2)
     Else 
         Tips "出错，未进行初始化操作！" : TracePrint Dim_Tips
     End If
@@ -448,14 +454,14 @@ End Function
 '信息类型：0=索引；1=标题；2=顶层句柄；3=绑定句柄；4=是否进入；5=进程PID；6=Vbox进程PID
 Function 雷电_获取模拟器信息(编号或标题, 信息类型)
     Dim ret, List1, List2, index, cs, 当前目录
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(信息类型) Then
             index = CLng(信息类型)
             cs = 0
             Do 
-                List1 = Split(vbCrLf & SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list2"), vbCr)
+                List1 = Split(vbCrLf & sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" list2"), vbCr)
                 List1 = Filter(List1, "Microsoft Windows", False)
                 List1 = Filter(List1, "Microsoft Corporation", False)
                 List1 = Filter(List1, ":\", False)
@@ -485,15 +491,15 @@ End Function
 Function 雷电_重启模拟器(编号或标题, 应用包名)
     Dim 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNull(应用包名) Then 应用包名 = "null"
         If 应用包名 = "" And LCase(应用包名) <> "null" Then 
             If IsNumeric(编号或标题) Then
-                返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" reboot --index " & 编号或标题)
+                返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" reboot --index " & 编号或标题)
             Else
-                返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" reboot --name " & 编号或标题)
+                返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" reboot --name " & 编号或标题)
             End If
             If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
                 ret = True
@@ -511,13 +517,13 @@ End Function
 Function 雷电_重命名模拟器(编号或标题, 新标题)
     Dim ret,当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" rename --index " & 编号或标题 & " --title " & 新标题)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" rename --index " & 编号或标题 & " --title " & 新标题)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" rename --name " & 编号或标题 & " --title " & 新标题)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" rename --name " & 编号或标题 & " --title " & 新标题)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -532,13 +538,13 @@ End Function
 Function 雷电_执行动作命令(编号或标题, 命令动作, 命令值)
     Dim ret,当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" action --index " & 编号或标题 & " --key " & 命令动作 & " --value " & 命令值)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" action --index " & 编号或标题 & " --key " & 命令动作 & " --value " & 命令值)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" action --name " & 编号或标题 & " --key " & 命令动作 & " --value " & 命令值)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" action --name " & 编号或标题 & " --key " & 命令动作 & " --value " & 命令值)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -553,13 +559,13 @@ End Function
 Function 雷电_Getprop命令(编号或标题, 键名)
     Dim ret,当前目录
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            ret = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" getprop --index " & 编号或标题 & " --key """ & 键名 & """")
+            ret = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" getprop --index " & 编号或标题 & " --key """ & 键名 & """")
         Else
-            ret = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" getprop --name " & 编号或标题 & " --key """ & 键名 & """")
+            ret = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" getprop --name " & 编号或标题 & " --key """ & 键名 & """")
         End If
     Else 
         Tips "出错，未进行初始化操作！" : TracePrint Dim_Tips
@@ -571,13 +577,13 @@ End Function
 Function 雷电_Setprop命令(编号或标题, 键名, 键值)
     Dim ret,当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" setprop --index " & 编号或标题 & " --key """ & 键名 & """ --value """ & 键值 & """")
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" setprop --index " & 编号或标题 & " --key """ & 键名 & """ --value """ & 键值 & """")
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" setprop --name " & 编号或标题 & " --key """ & 键名 & """ --value """ & 键值 & """")
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" setprop --name " & 编号或标题 & " --key """ & 键名 & """ --value """ & 键值 & """")
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -592,11 +598,11 @@ End Function
 Function 雷电_执行ADB命令(编号, ADB命令)
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号) Then 
-            ret = SMWH.GetDOS("""" & 当前目录 & "\ld.exe"" -s " & 编号 & " " & ADB命令)
+            ret = sm.GetDOS("""" & 当前目录 & "\ld.exe"" -s " & 编号 & " " & ADB命令)
         Else 
             Tips "出错，不支持用标题！" : TracePrint Dim_Tips
         End If 
@@ -610,14 +616,14 @@ End Function
 Function 雷电_模拟器备份(编号或标题, 保存路径)
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         For 2
         	If IsNumeric(编号或标题) Then
-            	返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" backup --index " & 编号或标题 & " --file  " & 保存路径)
+            	返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" backup --index " & 编号或标题 & " --file  " & 保存路径)
         	Else
-            	返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" backup --name " & 编号或标题 & " --file " & 保存路径)
+            	返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" backup --name " & 编号或标题 & " --file " & 保存路径)
         	End If
         	If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
                 Delay 20000
@@ -637,13 +643,13 @@ End Function
 Function 雷电_模拟器还原(编号或标题, 备份文件)
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" restore --index " & 编号或标题 & " --file  " & 备份文件)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" restore --index " & 编号或标题 & " --file  " & 备份文件)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" restore --name " & 编号或标题 & " --file " & 备份文件)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" restore --name " & 编号或标题 & " --file " & 备份文件)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -674,13 +680,13 @@ End Function
 Function 雷电_应用安装(编号或标题, 安装包路径)
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" installapp --index " & 编号或标题 & " --filename " & 安装包路径)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" installapp --index " & 编号或标题 & " --filename " & 安装包路径)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" installapp --name " & 编号或标题 & " --filename " & 安装包路径)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" installapp --name " & 编号或标题 & " --filename " & 安装包路径)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -695,13 +701,13 @@ End Function
 Function 雷电_应用包名安装(编号或标题, 包名)
     Dim ret,当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" installapp --index " & 编号或标题 & " --packagename " & 包名)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" installapp --index " & 编号或标题 & " --packagename " & 包名)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" installapp --name " & 编号或标题 & " --packagename " & 包名)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" installapp --name " & 编号或标题 & " --packagename " & 包名)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -716,13 +722,13 @@ End Function
 Function 雷电_应用卸载(编号或标题, 包名)
     Dim ret,当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" uninstallapp --index " & 编号或标题 & " --packagename " & 包名)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" uninstallapp --index " & 编号或标题 & " --packagename " & 包名)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" uninstallapp --name " & 编号或标题 & " --packagename " & 包名)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" uninstallapp --name " & 编号或标题 & " --packagename " & 包名)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -737,13 +743,13 @@ End Function
 Function 雷电_应用启动(编号或标题, 包名)
     Dim ret,当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runapp --index " & 编号或标题 & " --packagename " & 包名)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runapp --index " & 编号或标题 & " --packagename " & 包名)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runapp --name " & 编号或标题 & " --packagename " & 包名)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" runapp --name " & 编号或标题 & " --packagename " & 包名)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -758,13 +764,13 @@ End Function
 Function 雷电_应用关闭(编号或标题, 包名)
     Dim ret, 当前目录, 返回值
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" killapp --index " & 编号或标题 & " --packagename " & 包名)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" killapp --index " & 编号或标题 & " --packagename " & 包名)
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" killapp --name " & 编号或标题 & " --packagename " & 包名)
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" killapp --name " & 编号或标题 & " --packagename " & 包名)
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -782,13 +788,13 @@ Function 雷电_一键排列()
     Dim ret, 当前目录, 返回值
     Dim GetScRX, GetScRY, HwndEx, i, Hwnd, RECT, pw, Sw, Sh, ph, px, py
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then
         If IsNumeric(编号或标题) Then
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" sortWnd")
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" sortWnd")
         Else
-            返回值 = SMWH.GetDOS("""" & 当前目录 & "\dnconsole.exe"" sortWnd")
+            返回值 = sm.GetDOS("""" & 当前目录 & "\dnconsole.exe"" sortWnd")
         End If
         If CStr(返回值) = "0" Or Len(返回值) = 0 Then 
             ret = True
@@ -830,7 +836,7 @@ Function 雷电_获取IMEI(编号)
     Dim ret, 当前目录, 返回值, 文件路径, JSON源文件
     Dim sc, L1, L2
     ret = "" 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     If Dir(当前目录 & "\dnconsole.exe") Then 
         分割目录 = Split(当前目录, "\")
@@ -846,7 +852,7 @@ Function 雷电_获取IMEI(编号)
                 '解析JSON
                 L1 = InStr(JSON源文件, "{")
                 L2 = InStrRev(JSON源文件, "}")
-                If L1 > 0 And L2 > 0 Then 
+                If L1 > 0 And L2 > 0 And InStr(JSON源文件,"propertySettings.phoneIMEI") > 0 Then 
                     JSON源文件 = Mid(JSON源文件, L1, L2 - L1 + 1)
                     Set sc = CreateObject("MSScriptControl.ScriptControl")
                     sc.Language = "JScript"
@@ -868,7 +874,7 @@ Function 雷电_获取分辨率宽度(编号)
     Dim 当前目录, 返回值, 文件路径, JSON源文件
     Dim sc, L1, L2
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     返回值 = 1280
     If Dir(当前目录 & "\dnconsole.exe") Then 
@@ -907,7 +913,7 @@ Function 雷电_获取分辨率高度(编号)
     Dim 当前目录, 返回值, 文件路径, JSON源文件
     Dim sc, L1, L2
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     返回值 = 720
     If Dir(当前目录 & "\dnconsole.exe") Then 
@@ -946,7 +952,7 @@ Function 雷电_获取分辨率DPI(编号)
     Dim 当前目录, 返回值, 文件路径, JSON源文件
     Dim sc, L1, L2
     ret = False 
-    If Not IsObject(SMWH)  Then Call _初始化(DimEnv_VM_Dir)
+    If Not IsObject(sm)  Then Call _初始化(DimEnv_VM_Dir)
     当前目录 = DimEnv_VM_Dir
     返回值 = 240
     If Dir(当前目录 & "\dnconsole.exe") Then 
@@ -1005,7 +1011,7 @@ End Function
 Function ADB_获取当前应用包名与组件名(编号)
     Dim 返回值
     返回值 = 雷电_执行ADB命令(编号, "dumpsys activity top")
-    返回值 = SMWH.MidS(返回值, "ACTIVITY ", " ")
+    返回值 = sm.MidS(返回值, "ACTIVITY ", " ")
     If 返回值 <> "" Then 
         ADB_获取当前应用包名与组件名 = 返回值
     End If
@@ -1079,6 +1085,14 @@ End Function
 	'rebootTiming': 模拟器重启倒计时（分钟）
 */
 /*〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓【更新历史】〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓〓
+雷电模拟器v1.5 2021.03.24
+\
+|-- 修复 偶尔出现调试直接报错问题
+|
+雷电模拟器v1.4 2020.11.09
+\
+|-- 修复 无法自动查找雷电4.0路径问题
+|
 雷电模拟器v1.3 2018.12.24
 \
 |-- 修复 ADB_判断设备中是否有安装指定App() 命令，返回值不准确问题
